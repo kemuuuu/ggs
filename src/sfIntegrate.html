@@ -7,15 +7,17 @@
     <button id='log-in_btn'>ログイン</button>
     <div>
       <p>オブジェクト:</p>
-      <select name="target-object">
+      <select id="target-object" name="target-object">
         <option value="">---</option>
       </select>
     </div>
   </body>
   <script>
     const btn = document.getElementById('log-in_btn')
-    btn.onclick = () => {
-      new Promise((resolve, reject) => {
+    btn.onclick = () => { callLogin().then(() => callFetchObj())}
+
+    function callLogin() {
+      return new Promise((resolve, reject) => {
         google.script.run
         .withSuccessHandler((ret, element) => {
           console.log(ret)
@@ -29,23 +31,24 @@
         .withUserObject(this)
         .login()
       })
-      .then(() => {
-        google.script.run
-        .withSuccessHandler((ret, element) => {
-          ret.foreach(e => {
-            let op = document.createElement('option')
-            op.value = e
-            op.text = e
-            document.getElementById('target-object').appendChild(op)
-          })
-          element.disabled = false
+    }
+
+    function callFetchObj() {
+      google.script.run
+      .withSuccessHandler((ret, element) => {
+        ret.map(e => {
+          let op = document.createElement('option')
+          op.value = e
+          op.text = e
+          document.getElementById('target-object').appendChild(op)
         })
-        .withFailureHandler((msg, element) => {
-          element.disabled = false
-        })
-        .withUserObject(this)
-        .fetchObj()
+        element.disabled = false
       })
+      .withFailureHandler((msg, element) => {
+        element.disabled = false
+      })
+      .withUserObject(this)
+      .fetchObj()
     }
   </script>
 </html>
