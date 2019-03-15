@@ -1,6 +1,8 @@
-export class Api {
+import { SessionInfo } from './safagass'
 
-  sessioninfo;
+export class App {
+
+  sessioninfo: SessionInfo;
 
   constructor() {
     this.sessioninfo = null;
@@ -13,7 +15,7 @@ export class Api {
    * @param user_name 
    * @param user_pass 
    */
-  setAccessToken(client_id: string, client_secret: string, user_name: string, user_pass: string) {
+  setAccessToken (client_id: string, client_secret: string, user_name: string, user_pass: string): SessionInfo {
 
     const ACCESS_TOKEN_URL = "https://login.salesforce.com/services/oauth2/token";
 
@@ -32,9 +34,18 @@ export class Api {
       })
       let resultText = results.getContentText()
       let rc = results.getResponseCode()
-      self.sessioninfo = JSON.parse(results)
-      Logger.log(self.sessioninfo)
+      self.sessioninfo = JSON.parse(results.toString())
+      return self.sessioninfo
     }
+
+  }
+
+  /**
+   * Salesforceから編集可能オブジェクト情報を取得します
+   * TODO: とりあえずモックでかんべんしてくれ〜〜〜〜〜〜〜〜〜〜ぃ!!!!
+   */
+  fetchObjectInfo(): Array<string> {
+    return ['Account', 'Opportunity', 'Contact']
   }
 
   /**
@@ -47,10 +58,10 @@ export class Api {
     const response = UrlFetchApp.fetch(
       self.sessioninfo.instance_url + `/services/data/v20.0/sobjects/${sObj}/`, 
       {
-        "method" : "POST",
+        "method" : "post",
         "headers" : {
         "Authorization": "Bearer " + self.sessioninfo.access_token
-      },
+        },
         "payload": JSON.stringify(recdata),
         "contentType": "application/json; charset=utf-8",
         "muteHttpExceptions": true

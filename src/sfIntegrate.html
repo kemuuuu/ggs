@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <button id='log-in_btn'>ログイン</button>
+  </body>
+  <script>
+    const btn = document.getElementById('log-in_btn')
+    btn.onclick = () => {
+      new Promise((resolve, reject) => {
+        google.script.run
+        .withSuccessHandler((ret, element) => {
+          console.log(ret)
+          element.disabled = false;
+          resolve()
+        })
+        .withFailureHandler((msg, element) => {
+          console.log(msg)
+          element.disabled = false;
+        })
+        .withUserObject(this)
+        .login()
+      })
+      .then(() => {
+        
+      })
+    }
+  </script>
+</html>
+
+
