@@ -9,3 +9,14 @@ export interface SessionInfo {
   signature: string
   token_type: string
 }
+
+/**
+ * HTTPリクエストデータ
+ */
+export interface RequestData {
+  method: string
+  payload: any
+  headers?: { Authorization: string, Accept?: string }
+  contentType?: string
+  muteHttpExceptions?: boolean
+}

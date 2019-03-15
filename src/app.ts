@@ -1,11 +1,11 @@
-import { SessionInfo } from './safagass'
+import { SessionInfo, RequestData } from './safagass'
 
 export class App {
 
-  sessioninfo: SessionInfo;
+  sessioninfo: SessionInfo
 
   constructor() {
-    this.sessioninfo = null;
+    this.sessioninfo = null
   }
 
   /**
@@ -59,7 +59,7 @@ export class App {
       {
         "method" : "post",
         "headers" : {
-        "Authorization": "Bearer " + this.sessioninfo.access_token
+          "Authorization": "Bearer " + this.sessioninfo.access_token
         },
         "payload": JSON.stringify(recdata),
         "contentType": "application/json; charset=utf-8",
