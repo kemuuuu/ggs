@@ -27,4 +27,11 @@ function login(): string {
   return session_info.access_token
 }
 
+/**
+ * オブジェクト取得
+ */
+function fetchObj(): Array<string> {
+  return app.fetchObjectInfo()
+}
+
 

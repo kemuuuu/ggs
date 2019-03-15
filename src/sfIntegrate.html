@@ -5,6 +5,12 @@
   </head>
   <body>
     <button id='log-in_btn'>ログイン</button>
+    <div>
+      <p>オブジェクト:</p>
+      <select name="target-object">
+        <option value="">---</option>
+      </select>
+    </div>
   </body>
   <script>
     const btn = document.getElementById('log-in_btn')
@@ -24,7 +30,21 @@
         .login()
       })
       .then(() => {
-        
+        google.script.run
+        .withSuccessHandler((ret, element) => {
+          ret.foreach(e => {
+            let op = document.createElement('option')
+            op.value = e
+            op.text = e
+            document.getElementById('target-object').appendChild(op)
+          })
+          element.disabled = false
+        })
+        .withFailureHandler((msg, element) => {
+          element.disabled = false
+        })
+        .withUserObject(this)
+        .fetchObj()
       })
     }
   </script>
