@@ -20,7 +20,6 @@ export class App {
     const ACCESS_TOKEN_URL = "https://login.salesforce.com/services/oauth2/token";
 
     if (!this.sessioninfo) {
-      const self = this
       const payload = {
         'grant_type':'password',
         'client_id':client_id,
@@ -34,8 +33,8 @@ export class App {
       })
       let resultText = results.getContentText()
       let rc = results.getResponseCode()
-      self.sessioninfo = JSON.parse(results.toString())
-      return self.sessioninfo
+      this.sessioninfo = JSON.parse(results.toString())
+      return this.sessioninfo
     }
 
   }
@@ -54,13 +53,13 @@ export class App {
    * @param recdata record data
    */
   createRecord(sObj: string, recdata: object) {
-    const self = this
+
     const response = UrlFetchApp.fetch(
-      self.sessioninfo.instance_url + `/services/data/v20.0/sobjects/${sObj}/`, 
+      this.sessioninfo.instance_url + `/services/data/v20.0/sobjects/${sObj}/`, 
       {
         "method" : "post",
         "headers" : {
-        "Authorization": "Bearer " + self.sessioninfo.access_token
+        "Authorization": "Bearer " + this.sessioninfo.access_token
         },
         "payload": JSON.stringify(recdata),
         "contentType": "application/json; charset=utf-8",
@@ -73,8 +72,27 @@ export class App {
     const rc = response.getResponseCode();
   }
 
-
+  /**
+   * レコード検索
+   * TODO: 項目動的にする、検索対象動的にする、諸々頑張る、コレほぼモック
+   * @param sObj 
+   * @param keyword 
+   */
   searchRecords(sObj: string, keyword: string) {
 
+    let query: string = `SELECT id, name FROM ${sObj} WHERE name LIKE %${keyword}%`
+
+    const queryUrl: string = this.sessioninfo.instance_url + "/services/data/v32.0/query?q=" + encodeURIComponent(query)
+    const response = UrlFetchApp.fetch(queryUrl, {
+      "contentType": "application/json",
+      "headers": {
+        "Authorization": "Bearer " + this.sessioninfo.access_token,
+        "Accept": "application/json",
+      },
+      "muteHttpExceptions": true
+    })
+
+    const responseText = response.getContentText()
+    const rc = response.getResponseCode()
   }
 }

@@ -34,4 +34,11 @@ function fetchObj(): Array<string> {
   return app.fetchObjectInfo()
 }
 
-
+/**
+ * レコード検索奴
+ * @param sObjName 
+ * @param keyword 
+ */
+function search(sObjName: string, keyword: string): any {
+  return app.searchRecords(sObjName, keyword)
+}
