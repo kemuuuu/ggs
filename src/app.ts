@@ -106,10 +106,7 @@ export class App {
 
     const responseText = result.getContentText()
     const rc = result.getResponseCode()
-    
-    Logger.log(typeof result)
-    Logger.log(result)
 
-    return result.records
+    return JSON.parse(result)['records']
   }
 }

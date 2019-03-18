@@ -44,5 +44,20 @@ function fetchObj(): Array<string> {
  * @param keyword 
  */
 function search(sObjName: string, keyword: string): any {
-  return app.searchRecords(sObjName, keyword)
+  new Promise((resolve, reject) => {
+    const records = app.searchRecords(sObjName, keyword)
+    Logger.log(records)
+    if (records) {
+      resolve(records)
+    } else {
+      reject()
+    }
+  })
+  .then((records) => {
+    const columns = records[0].keys().filter((key) => {key != 'attributes'})
+    Logger.log(columns)
+    records.map((rec) => {
+      Logger.log(rec)
+    })
+  })
 }
