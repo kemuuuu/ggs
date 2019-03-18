@@ -20,3 +20,12 @@ export interface RequestData {
   contentType?: string
   muteHttpExceptions?: boolean
 }
+
+/**
+ * 検索結果
+ */
+export interface SearchResult {
+  totalSize: number
+  done: boolean
+  records: Array<any>
+}

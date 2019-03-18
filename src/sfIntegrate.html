@@ -14,6 +14,7 @@
     <div>
       <p>検索:</p>
       <button id='search_btn'>検索</button>
+      <button id='isLogedIn_btn'>ログインしてる?</button>
     </div>
   </body>
   <script>
@@ -22,6 +23,20 @@
 
     const search_btn = document.getElementById('search_btn')
     search_btn.onclick = () => {callSearch()}
+
+    const is_btn = document.getElementById('isLogedIn_btn')
+    is_btn.onclick = () => {
+      google.script.run
+      .withSuccessHandler((ret, element) => {
+        console.log(ret)
+        element.disabled = false
+      })
+      .withFailureHandler((msg, element) => {
+        element.disabled = false
+      })
+      .withUserObject(this)
+      .isLoggedIn()
+    }
 
     function callLogin() {
       return new Promise((resolve, reject) => {
@@ -70,7 +85,7 @@
         element.disabled = false
       })
       .withUserObject(this)
-      .search()
+      .search('Account', 't')
     }
   </script>
 </html>

@@ -19,11 +19,15 @@ function showApp(): void {
 // 接続アプリケーション
 const app: App = new App()
 
+function isLoggedIn() :SessionInfo {
+  return app.getSessionInfo()
+}
+
 /**
  * LOG-iN
  */
 function login(): string {
-  const session_info: SessionInfo = app.setAccessToken(CLIENT_ID, CLIENT_SECRET, USER_NAME, USER_PASS)
+  const session_info: SessionInfo = app.setSessionInfo(CLIENT_ID, CLIENT_SECRET, USER_NAME, USER_PASS)
   return session_info.access_token
 }
 

@@ -12,6 +12,10 @@ export class App {
     if (si) this.sessioninfo = JSON.parse(si)
   }
 
+  getSessionInfo() :SessionInfo {
+    return this.sessioninfo
+  }
+
   /**
    * get access token of salesforce
    * @param client_id 
@@ -19,7 +23,7 @@ export class App {
    * @param user_name 
    * @param user_pass 
    */
-  setAccessToken (client_id: string, client_secret: string, user_name: string, user_pass: string): SessionInfo {
+  setSessionInfo (client_id: string, client_secret: string, user_name: string, user_pass: string): SessionInfo {
     
     const ACCESS_TOKEN_URL = "https://login.salesforce.com/services/oauth2/token";    
     const payload = {
@@ -86,11 +90,11 @@ export class App {
    * @param sObj 
    * @param keyword 
    */
-  searchRecords(sObj: string, keyword: string) {
+  searchRecords(sObj: string, keyword: string): Array<any> {
 
-    let query: string = `SELECT id, name FROM ${sObj} WHERE name LIKE %${keyword}%`
-
+    let query: string = `SELECT id, name FROM ${sObj} WHERE name LIKE '%${keyword}%'`
     const queryUrl: string = this.sessioninfo.instance_url + "/services/data/v32.0/query?q=" + encodeURIComponent(query)
+
     const result = UrlFetchApp.fetch(queryUrl, {
       "contentType": "application/json",
       "headers": {
@@ -102,7 +106,10 @@ export class App {
 
     const responseText = result.getContentText()
     const rc = result.getResponseCode()
-    Logger.log('SEARCH: rc = ' + rc)
+    
+    Logger.log(typeof result)
     Logger.log(result)
+
+    return result.records
   }
 }
