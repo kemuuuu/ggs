@@ -53,7 +53,7 @@ export class App {
 
   /**
    * Salesforceから編集可能オブジェクト情報を取得します
-   * TODO: とりあえずモックでかんべんしてくれ〜〜〜〜〜〜〜〜〜〜ぃ!!!!
+   * TODO: モックです。
    */
   fetchObjectInfo(): Array<string> {
     return ['Account', 'Opportunity', 'Contact']
@@ -90,7 +90,7 @@ export class App {
    * @param sObj 
    * @param keyword 
    */
-  searchRecords(sObj: string, keyword: string): Array<any> {
+  searchRecords(sObj: string, keyword: string) {
 
     let query: string = `SELECT id, name FROM ${sObj} WHERE name LIKE '%${keyword}%'`
     const queryUrl: string = this.sessioninfo.instance_url + "/services/data/v32.0/query?q=" + encodeURIComponent(query)
@@ -107,6 +107,7 @@ export class App {
     const responseText = result.getContentText()
     const rc = result.getResponseCode()
 
-    return JSON.parse(result)['records']
+    const records = JSON.parse(result.getContentText()).records
+    Logger.log(records)
   }
 }
